@@ -1,4 +1,4 @@
-// axios.get('http://www.myapifilms.com/imdb/top?token=ebfb7525-3b98-4d85-b1ed-e1796c3b0087&format=json&data=0')
+// axios.get('http://www.myapifilms.com/imdb/top?token=5d0d20e7-5767-403f-b7a0-d070e43c8bba&format=json&data=0')
 //     .then(function(response) {
 //         console.log(response);
 //     })
@@ -15,11 +15,11 @@ let sortByNameBtn = document.querySelector('.sortByName');
 let search = document.querySelector('#search');
 let yearFrom = document.querySelector('.year-from');
 let yearTo = document.querySelector('.year-to');
-let filterByYaerBtn = document.querySelector('.filterByYear');
+let filterByYearBtn = document.querySelector('.filterByYear');
 
 search.addEventListener('keyup', searchByName);
 sortByNameBtn.addEventListener('click', sortByName);
-filterByYaerBtn.addEventListener('click', filterByYear);
+filterByYearBtn.addEventListener('click', filterByYear);
 
 function searchByName () {
     listMovies.innerHTML = '';
@@ -51,11 +51,23 @@ function sortByName() {
 function renderMovie(film) {
     let html = `
     <div class="movie col s4">
-        <img src=${film.urlPoster} alt="poster">
+        <img src=${film.urlPoster} alt="poster" data-id=${film.idIMDB}>
         <h5>${film.title}</h5>
         <p>${film.year}</p>
     </div>`;
     listMovies.insertAdjacentHTML('beforeend', html);
+}
+
+function onImageClick (e) {
+    let filmId = e.target.getAttribute('data-id');
+    console.log(filmId);
+    let filmDetais = tempData.data.movies.find((item) => {
+        return item.idIMDB === filmId;
+    });
+    let stringifiedFilmDetails = JSON.stringify(filmDetais);
+    console.log(stringifiedFilmDetails);
+    localStorage.setItem('filmDetails', `${stringifiedFilmDetails}`);
+    window.location = 'details.html';
 }
 
 function renderList(list) {
@@ -64,4 +76,12 @@ function renderList(list) {
     });
 }
 
-renderList(tempData.data.movies)
+function appendEventListeners () {
+    let imageList = document.querySelectorAll('.movie > img');
+    for (let i = 0; i < imageList.length; i++) {
+        imageList[i].addEventListener('click', onImageClick);
+    }
+}
+
+renderList(tempData.data.movies);
+appendEventListeners();
