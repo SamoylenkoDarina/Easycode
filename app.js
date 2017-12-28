@@ -1,6 +1,7 @@
 import axios from 'axios';
 import mainJs from './js/main';
-import renderDetails from './js/details'
+import renderDetails from './js/details';
+import { renderInTheaters } from './js/main';
 
 export function changeHash (hash) {
     window.location.hash = hash;
@@ -22,6 +23,9 @@ function loadData () {
         mainJs();
     } else if (hash === '#details') {
         renderDetails(param);
+    } else if (hash === '#in-theaters') {
+        renderInTheaters();
+        console.log(renderInTheaters);
     }
 }
 

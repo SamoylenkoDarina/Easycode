@@ -27,3 +27,22 @@ img:hover {
 .row .col.s4 {
   margin-left: 0;
 }
+#btn-back {
+  border: none;
+  border-radius: 2px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14);
+  display: block;
+  margin: 10px 0;
+  width: 104px;
+  height: 36px;
+  outline: none;
+  text-decoration: none;
+  color: #fff;
+  background-color: #26a69abf;
+  text-align: center;
+  letter-spacing: .5px;
+}
+#btn-back:hover {
+  background-color: #189185bf;
+}

@@ -417,6 +417,9 @@ function loadData() {
         (0, _main2.default)();
     } else if (hash === '#details') {
         (0, _details2.default)(param);
+    } else if (hash === '#in-theaters') {
+        (0, _main.renderInTheaters)();
+        console.log(_main.renderInTheaters);
     }
 }
 
@@ -1842,6 +1845,7 @@ module.exports = function spread(callback) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.renderInTheaters = renderInTheaters;
 
 var _app = __webpack_require__(1);
 
@@ -1855,6 +1859,7 @@ console.log(_app.changeHash);
 
 var apiScript = void 0;
 var response = void 0;
+var currentFilmList = void 0;
 var sss = 'hello';
 var listMovies = document.querySelector('.container');
 var sortByNameBtn = document.querySelector('.sortByName');
@@ -1862,11 +1867,11 @@ var search = document.querySelector('#search');
 var yearFrom = void 0;
 var yearTo = void 0;
 var filterByYearBtn = void 0;
-var filmInTheatre = document.querySelector('.inTheaters');
+var filmInTheater = document.querySelector('.inTheaters');
 
 search.addEventListener('keyup', searchByName);
 sortByNameBtn.addEventListener('click', sortByName);
-filmInTheatre.addEventListener('click', getFilmsInTheaters);
+filmInTheater.addEventListener('click', getFilmsInTheaters);
 
 function mainJs() {
     var url = 'http://www.myapifilms.com/imdb/top?token=5d0d20e7-5767-403f-b7a0-d070e43c8bba&format=json&data=0';
@@ -1877,7 +1882,7 @@ function searchByName() {
     var _this = this;
 
     listMovies.innerHTML = '';
-    var tempArray = response.data.movies;
+    var tempArray = currentFilmList;
     tempArray = tempArray.filter(function (film) {
         return film.title.toUpperCase().indexOf(_this.value.toUpperCase()) === 0;
     });
@@ -1886,7 +1891,7 @@ function searchByName() {
 
 function filterByYear() {
     listMovies.innerHTML = '';
-    var tempArray = response.data.movies;
+    var tempArray = currentFilmList;
     tempArray = tempArray.filter(function (film) {
         return film.year >= yearFrom.value && film.year <= yearTo.value;
     });
@@ -1895,7 +1900,7 @@ function filterByYear() {
 
 function sortByName() {
     listMovies.innerHTML = '';
-    var tempArray = response.data.movies;
+    var tempArray = currentFilmList;
     tempArray.sort(function (a, b) {
         return a.title > b.title ? 1 : -1;
     });
@@ -1927,11 +1932,13 @@ function renderList(list) {
 
 function getFilmsInTheaters() {
     listMovies.innerHTML = '';
-    var tempArray = response.data.movies;
-    tempArray = tempArray.filter(function (film) {
-        return film.year === '1994';
-    });
-    renderList(tempArray);
+    var hash = '#in-theaters';
+    (0, _app.changeHash)(hash);
+}
+
+function renderInTheaters() {
+    var url = 'http://api.myapifilms.com/imdb/inTheaters?token=5d0d20e7-5767-403f-b7a0-d070e43c8bba&format=json';
+    (0, _request2.default)(url, processInTheatersFilms);
 }
 
 function appendEventListeners() {
@@ -1947,8 +1954,24 @@ function appendEventListeners() {
 
 function processFilms(res) {
     response = res;
+    currentFilmList = response.data.movies;
     console.log(response);
-    renderList(response.data.movies);
+    renderList(currentFilmList);
+}
+
+function processInTheatersFilms(res) {
+    response = res;
+    currentFilmList = response.data.inTheaters[1].movies;
+    console.log('in theaters', response);
+    renderList(currentFilmList);
+    var html = '\n    <button id="btn-back">Back</button>';
+    listMovies.insertAdjacentHTML('afterbegin', html);
+    var btnBack = document.querySelector('#btn-back');
+    btnBack.addEventListener('click', goBack);
+}
+
+function goBack() {
+    (0, _app.changeHash)('#main');
 }
 
 exports.default = mainJs;

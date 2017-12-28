@@ -4,6 +4,7 @@ console.log(changeHash);
 
 let apiScript;
 let response;
+let currentFilmList;
 let sss ='hello';
 let listMovies = document.querySelector('.container');
 let sortByNameBtn = document.querySelector('.sortByName');
@@ -11,11 +12,11 @@ let search = document.querySelector('#search');
 let yearFrom;
 let yearTo;
 let filterByYearBtn;
-let filmInTheatre = document.querySelector('.inTheaters');
+let filmInTheater = document.querySelector('.inTheaters');
 
 search.addEventListener('keyup', searchByName);
 sortByNameBtn.addEventListener('click', sortByName);
-filmInTheatre.addEventListener('click', getFilmsInTheaters);
+filmInTheater.addEventListener('click', getFilmsInTheaters);
 
 function mainJs () {
      let url = `http://www.myapifilms.com/imdb/top?token=5d0d20e7-5767-403f-b7a0-d070e43c8bba&format=json&data=0`;
@@ -24,7 +25,7 @@ function mainJs () {
 
 function searchByName() {
     listMovies.innerHTML = '';
-    let tempArray = response.data.movies;
+    let tempArray = currentFilmList;
     tempArray = tempArray.filter((film) => {
         return film.title.toUpperCase().indexOf(this.value.toUpperCase()) === 0;
     });
@@ -33,7 +34,7 @@ function searchByName() {
 
 function filterByYear() {
     listMovies.innerHTML = '';
-    let tempArray = response.data.movies;
+    let tempArray = currentFilmList;
     tempArray = tempArray.filter((film) => {
         return film.year >= yearFrom.value && film.year <= yearTo.value;
     });
@@ -42,7 +43,7 @@ function filterByYear() {
 
 function sortByName() {
     listMovies.innerHTML = '';
-    let tempArray = response.data.movies;
+    let tempArray = currentFilmList;
     tempArray.sort((a, b) => {
         return a.title > b.title ? 1 : -1;
     });
@@ -89,11 +90,13 @@ function renderList(list) {
 
 function getFilmsInTheaters(){
     listMovies.innerHTML = '';
-    let tempArray = response.data.movies;
-    tempArray = tempArray.filter((film) => {
-        return film.year==='1994';
-    });
-    renderList(tempArray);
+    let hash = `#in-theaters`;
+    changeHash(hash);
+}
+
+export function renderInTheaters () {
+    let url = `http://api.myapifilms.com/imdb/inTheaters?token=5d0d20e7-5767-403f-b7a0-d070e43c8bba&format=json`;
+    request(url, processInTheatersFilms);
 }
 
 function appendEventListeners () {
@@ -109,8 +112,25 @@ function appendEventListeners () {
 
 function processFilms (res) {
     response = res;
+    currentFilmList = response.data.movies;
     console.log(response);    
-    renderList(response.data.movies);
+    renderList(currentFilmList);
+}
+
+function processInTheatersFilms (res) {
+    response = res;
+    currentFilmList = response.data.inTheaters[1].movies;
+    console.log('in theaters', response);    
+    renderList(currentFilmList);
+    let html = `
+    <button id="btn-back">Back</button>`
+    listMovies.insertAdjacentHTML('afterbegin', html);
+    let btnBack = document.querySelector('#btn-back');
+    btnBack.addEventListener('click', goBack)
+}
+
+function goBack() {
+    changeHash('#main');
 }
 
 export default mainJs;
