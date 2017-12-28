@@ -39,7 +39,7 @@ function renderHtml (film) {
 }
 
 function goBack() {
-    changeHash('#main');
+    changeHash(localStorage.getItem('prevHash'));
 }
 
 function processDetails (response) {

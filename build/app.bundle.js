@@ -398,6 +398,7 @@ var _details2 = _interopRequireDefault(_details);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function changeHash(hash) {
+    localStorage.setItem('prevHash', window.location.hash);
     window.location.hash = hash;
     loadData();
 }
@@ -1860,18 +1861,20 @@ console.log(_app.changeHash);
 var apiScript = void 0;
 var response = void 0;
 var currentFilmList = void 0;
-var sss = 'hello';
-var listMovies = document.querySelector('.container');
-var sortByNameBtn = document.querySelector('.sortByName');
-var search = document.querySelector('#search');
 var yearFrom = void 0;
 var yearTo = void 0;
 var filterByYearBtn = void 0;
+var listMovies = document.querySelector('.container');
+var sortByNameBtn = document.querySelector('.sortByName');
+var search = document.querySelector('#search');
+var goHomeBtn = document.querySelector('.goHome');
+
 var filmInTheater = document.querySelector('.inTheaters');
 
 search.addEventListener('keyup', searchByName);
 sortByNameBtn.addEventListener('click', sortByName);
 filmInTheater.addEventListener('click', getFilmsInTheaters);
+goHomeBtn.addEventListener('click', goHome);
 
 function mainJs() {
     var url = 'http://www.myapifilms.com/imdb/top?token=5d0d20e7-5767-403f-b7a0-d070e43c8bba&format=json&data=0';
@@ -1965,12 +1968,9 @@ function processInTheatersFilms(res) {
     console.log('in theaters', response);
     renderList(currentFilmList);
     var html = '\n    <button id="btn-back">Back</button>';
-    listMovies.insertAdjacentHTML('afterbegin', html);
-    var btnBack = document.querySelector('#btn-back');
-    btnBack.addEventListener('click', goBack);
 }
 
-function goBack() {
+function goHome() {
     (0, _app.changeHash)('#main');
 }
 
@@ -2022,7 +2022,7 @@ function renderHtml(film) {
 }
 
 function goBack() {
-    (0, _app.changeHash)('#main');
+    (0, _app.changeHash)(localStorage.getItem('prevHash'));
 }
 
 function processDetails(response) {

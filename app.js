@@ -4,6 +4,7 @@ import renderDetails from './js/details';
 import { renderInTheaters } from './js/main';
 
 export function changeHash (hash) {
+    localStorage.setItem('prevHash', window.location.hash);
     window.location.hash = hash;
     loadData()
 }

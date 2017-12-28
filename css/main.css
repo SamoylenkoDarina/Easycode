@@ -3,7 +3,7 @@
   height: 100vh;
   background-color: #fff;
   opacity: 0.5;
-  position: absolute;
+  position: fixed;
   z-index: 10;
   background-image: url('http://cvit.com.ua/images/spinner.gif');
   background-position: center;

@@ -5,18 +5,20 @@ console.log(changeHash);
 let apiScript;
 let response;
 let currentFilmList;
-let sss ='hello';
-let listMovies = document.querySelector('.container');
-let sortByNameBtn = document.querySelector('.sortByName');
-let search = document.querySelector('#search');
 let yearFrom;
 let yearTo;
 let filterByYearBtn;
+let listMovies = document.querySelector('.container');
+let sortByNameBtn = document.querySelector('.sortByName');
+let search = document.querySelector('#search');
+let goHomeBtn = document.querySelector('.goHome');
+
 let filmInTheater = document.querySelector('.inTheaters');
 
 search.addEventListener('keyup', searchByName);
 sortByNameBtn.addEventListener('click', sortByName);
 filmInTheater.addEventListener('click', getFilmsInTheaters);
+goHomeBtn.addEventListener('click', goHome);
 
 function mainJs () {
      let url = `http://www.myapifilms.com/imdb/top?token=5d0d20e7-5767-403f-b7a0-d070e43c8bba&format=json&data=0`;
@@ -124,12 +126,9 @@ function processInTheatersFilms (res) {
     renderList(currentFilmList);
     let html = `
     <button id="btn-back">Back</button>`
-    listMovies.insertAdjacentHTML('afterbegin', html);
-    let btnBack = document.querySelector('#btn-back');
-    btnBack.addEventListener('click', goBack)
 }
 
-function goBack() {
+function goHome() {
     changeHash('#main');
 }
 
