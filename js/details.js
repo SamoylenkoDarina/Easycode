@@ -1,9 +1,13 @@
-let container = document.querySelector('.container');
+import { changeHash } from '../app';
+import request from './request'
 
-function getDetails () {
-    let stringifiedFilmDetails = localStorage.getItem('filmDetails');
-    let parsedFilmDetails = JSON.parse(stringifiedFilmDetails);
-    renderHtml(parsedFilmDetails);
+let container = document.querySelector('.container');
+let apiScript;
+
+function renderDetails (id) {
+    console.log(id)
+    let url = `http://api.myapifilms.com/imdb/idIMDB?idIMDB=${id}&token=5d0d20e7-5767-403f-b7a0-d070e43c8bba&format=json`;
+    request(url, processDetails);
 }
 
 function getWriters (film) {
@@ -15,6 +19,7 @@ function getWriters (film) {
 }
 
 function renderHtml (film) {
+    container.innerHTML = '';
     let html = `
         <div class="movie col s4">
             <button id="btn-back" style="display: block; margin: 10px 0;">Back</button>
@@ -34,10 +39,14 @@ function renderHtml (film) {
 }
 
 function goBack() {
-    window.location = 'index.html';
+    changeHash('#main');
 }
 
-getDetails();
+function processDetails (response) {
+    renderHtml(response.data.movies[0]);
+}
+
+export default renderDetails;
 
 
 
